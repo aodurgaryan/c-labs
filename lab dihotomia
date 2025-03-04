@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cmath>
+
+double example_function(double x) {
+    return pow(x, 3) - 0.2 * x * x + 0.5 * x; // Функция f(x)
+}
+
+double dichotomy_method(double (*f)(double), double a, double b, double epsilon) {
+    if (f(a) * f(b) > 0) {
+        return NAN; // Если знаки на концах интервала одинаковые, корней нет
+    }
+
+    int iterations = 0;
+    while ((b - a) / 2 > epsilon) {
+        double c = (a + b) / 2;
+        iterations++;
+
+        if (f(c) == 0) {
+            return c; // Найден корень, если f(c) == 0
+        } else if (f(a) * f(c) < 0) {
+            b = c; // Корень находится между a и c
+        } else {
+            a = c; // Корень находится между c и b
+        }
+    }
+
+    std::cout << "Количество итераций: " << iterations << std::endl; // Вывод количества итераций
+    return (a + b) / 2; // Возвращаем среднее значение a и b
+}
+
+int main() {
+    double a = 0; // Левый край интервала
+    double b = 3; // Правый край интервала 
+    double epsilon = 1e-10; // Точность
+
+    // Поиск корня
+    double root = dichotomy_method(example_function, a, b, epsilon);
+
+    // Проверка, найден ли корень
+    if (std::isnan(root)) {
+        std::cout << "Корни не найдены в заданном интервале." << std::endl;
+    } else {
+        std::cout << "Решение уравнения: x = " << root << std::endl; // Вывод корня
+        double fun = example_function(root);
+        std::cout << "Значение функции: f(" << root << ") = " << fun << std::endl; // Вывод значения функции
+    }
+
+    return 0;
+}
