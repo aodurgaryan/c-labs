@@ -1,0 +1,39 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+double f2(double x) {
+    return pow(x, 2) * exp(-x);
+}
+
+double rectangle_method_infinity(double a, int n) {
+    double h = a / n;
+    double sum = 0.0;
+    for (int i = 0; i < n; ++i) {
+        sum += f2(i * h);
+    }
+    return sum * h;
+}
+
+double trapezoidal_method_infinity(double a, int n) {
+    double h = a / n;
+    double sum = (f2(0) + f2(a)) / 2.0;
+    for (int i = 1; i < n; ++i) {
+        sum += f2(i * h);
+    }
+    return sum * h;
+}
+
+int main() {
+    double a = 100; // Конечный предел для интеграла
+    int n = 1000000; // Количество разбиений
+
+    double result_rectangle = rectangle_method_infinity(a, n);
+    double result_trapezoidal = trapezoidal_method_infinity(a, n);
+
+    std::cout << std::fixed << std::setprecision(6);
+    std::cout << "Результат метода прямоугольников: " << result_rectangle << std::endl;
+    std::cout << "Результат метода трапеций: " << result_trapezoidal << std::endl;
+
+    return 0;
+}
